@@ -26,6 +26,7 @@ CGameControllerDOM::CGameControllerDOM(class CGameContext *pGameServer)
 
 	flagCount = 0;
 	scoreCounter = Server()->Tick();
+	broadcastCounter = Server()->Tick();
 	teamWinning = -1;
 
 	m_pGameType = "DOM";
@@ -102,6 +103,21 @@ void CGameControllerDOM::Tick()
 			teamWinning = TEAM_BLUE;
 		} else {
 			teamWinning = -1;
+		}
+
+	}
+
+	if(teamWinning == TEAM_BLUE || teamWinning == TEAM_RED) {
+		if(Server()->Tick() - broadcastCounter > 100.0f) {
+			broadcastCounter = Server()->Tick();
+
+			char aBuf[512];
+			if(teamWinning == TEAM_RED)
+				str_format(aBuf, sizeof(aBuf), "Blue team is holding the most points");
+			else
+				str_format(aBuf, sizeof(aBuf), "Red team is holding the most points");
+			
+			GameServer()->SendBroadcast(aBuf, -1);
 		}
 	}
 }

@@ -11,8 +11,9 @@ private:
 	vec2 flagPoints[10];
 	vec2 flagControlling[10];
 	int flagCount;
-	float scoreCounter;
 	int teamWinning;
+	float scoreCounter;
+	float broadcastCounter;
 
 public:
 	CGameControllerDOM(class CGameContext *pGameServer);
