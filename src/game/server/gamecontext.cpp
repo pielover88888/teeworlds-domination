@@ -1500,7 +1500,8 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 		m_pController = new CGameControllerCTF(this);
 	else if(str_comp(g_Config.m_SvGametype, "tdm") == 0)
 		m_pController = new CGameControllerTDM(this);
-	else if(str_comp(g_Config.m_SvGametype, "dom") == 0)
+	else if(str_comp(g_Config.m_SvGametype, "domgrenade") == 0 || str_comp(g_Config.m_SvGametype, "domrifle") == 0 || 
+		str_comp(g_Config.m_SvGametype, "domgun") == 0 || str_comp(g_Config.m_SvGametype, "dom") == 0)
 		m_pController = new CGameControllerDOM(this);
 	else
 		m_pController = new CGameControllerDM(this);

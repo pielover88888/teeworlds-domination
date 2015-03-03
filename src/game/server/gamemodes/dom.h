@@ -12,6 +12,9 @@ private:
 	vec2 flagControlling[10];
 	int flagCount;
 	int teamWinning;
+	int Weapon;
+	int gunDelay;
+	int gunReload;
 	float scoreCounter;
 	float broadcastCounter;
 
@@ -20,6 +23,7 @@ public:
 
 	virtual bool OnEntity(int Index, vec2 Pos);
 	virtual void Snap(int SnappingClient);
+	virtual void OnCharacterSpawn(class CCharacter *pChr);
 	virtual void Tick();
 };
 
