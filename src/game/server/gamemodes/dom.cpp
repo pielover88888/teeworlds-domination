@@ -10,6 +10,7 @@
 #include <game/mapitems.h>
 #include <game/server/entities/character.h>
 #include <game/server/entities/flag.h>
+#include <game/server/entities/connecter.h>
 #include <game/server/player.h>
 #include <game/server/gamecontext.h>
 #include <math.h>
@@ -64,7 +65,6 @@ void CGameControllerDOM::Tick()
 {
 	IGameController::Tick();
 
-
 	// reset flag controlling count
 	for(int i=0; i<flagCount+1; i++)
 		flagControlling[i] = vec2(0, 0);
@@ -81,10 +81,17 @@ void CGameControllerDOM::Tick()
 				vec2 CharPos = Character->m_Pos;
 				vec2 PointPos = flagPoints[flag];
 
-				int DistanceToPoint = (abs(CharPos.x-PointPos.x) + abs(CharPos.y-PointPos.y));
+				int DistanceToPoint = distance(PointPos, CharPos);
 
+				if(DistanceToPoint < 480) {
+					double Direction = atan2(CharPos.y - PointPos.y, CharPos.x - PointPos.x);
+					float xpos = cos(Direction);
+					float ypos = sin(Direction);
 
-				if(DistanceToPoint < 640) {
+					vec2 To(normalize(vec2(xpos, ypos)));
+
+					new CConnecter(&GameServer()->m_World, PointPos, To, DistanceToPoint);
+
 					if(GameServer()->m_apPlayers[i]->GetTeam() == TEAM_RED)
 						flagControlling[flag].x++;
 					if(GameServer()->m_apPlayers[i]->GetTeam() == TEAM_BLUE)
@@ -132,6 +139,7 @@ void CGameControllerDOM::Tick()
 		if(Server()->Tick() - broadcastCounter > 100.0f) {
 			broadcastCounter = Server()->Tick();
 
+			/*
 			char aBuf[512];
 			if(teamWinning == TEAM_RED)
 				str_format(aBuf, sizeof(aBuf), "Blue team is holding the most points");
@@ -139,6 +147,7 @@ void CGameControllerDOM::Tick()
 				str_format(aBuf, sizeof(aBuf), "Red team is holding the most points");
 			
 			GameServer()->SendBroadcast(aBuf, -1);
+			*/
 		}
 	}
 }
