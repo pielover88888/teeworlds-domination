@@ -13,8 +13,6 @@ private:
 	int flagCount;
 	int teamWinning;
 	int Weapon;
-	int gunDelay;
-	int gunReload;
 	float scoreCounter;
 	float broadcastCounter;
 

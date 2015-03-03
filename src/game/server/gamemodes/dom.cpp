@@ -31,9 +31,6 @@ CGameControllerDOM::CGameControllerDOM(class CGameContext *pGameServer)
 	teamWinning = -1;
 	Weapon = WEAPON_GUN;
 
-	gunReload = g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Ammoregentime;
-	gunDelay = g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Firedelay;
-
 	m_pGameType = "DOM";
 	m_GameFlags = GAMEFLAG_TEAMS|GAMEFLAG_FLAGS;
 }
@@ -177,9 +174,6 @@ void CGameControllerDOM::Snap(int SnappingClient)
 
 void CGameControllerDOM::OnCharacterSpawn(class CCharacter *pChr)
 {
-	g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Ammoregentime = gunReload;
-	g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Firedelay = gunDelay;
-
 	// starting weapons
 	if(str_comp(g_Config.m_SvGametype, "domgrenade") == 0) {
 		pChr->IncreaseHealth(1);
@@ -196,10 +190,6 @@ void CGameControllerDOM::OnCharacterSpawn(class CCharacter *pChr)
 		pChr->GiveWeapon(WEAPON_GUN, 1);
 		pChr->SetWeapon(WEAPON_GUN);
 		Weapon = WEAPON_GUN;
-		gunReload = g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Ammoregentime;
-		gunDelay = g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Firedelay;
-		g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Ammoregentime = g_pData->m_Weapons.m_aId[WEAPON_RIFLE].m_Ammoregentime;
-		g_pData->m_Weapons.m_aId[WEAPON_GUN].m_Firedelay = g_pData->m_Weapons.m_aId[WEAPON_RIFLE].m_Firedelay;
 	} else {
 		pChr->IncreaseHealth(10);
 		pChr->GiveWeapon(WEAPON_HAMMER, -1);

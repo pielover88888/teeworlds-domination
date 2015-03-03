@@ -21,6 +21,7 @@ void CConnecter::Tick()
 
 	if(m_Energy < 0) {
 		GameServer()->m_World.DestroyEntity(this);
+		Reset();
 		return;
 	}
 

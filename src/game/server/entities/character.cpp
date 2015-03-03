@@ -428,8 +428,12 @@ void CCharacter::FireWeapon()
 	if(m_aWeapons[m_ActiveWeapon].m_Ammo > 0) // -1 == unlimited
 		m_aWeapons[m_ActiveWeapon].m_Ammo--;
 
-	if(!m_ReloadTimer)
+	if(!m_ReloadTimer) {
 		m_ReloadTimer = g_pData->m_Weapons.m_aId[m_ActiveWeapon].m_Firedelay * Server()->TickSpeed() / 1000;
+		
+		if(str_comp(g_Config.m_SvGametype, "domgun") == 0)
+			m_ReloadTimer = g_pData->m_Weapons.m_aId[WEAPON_RIFLE].m_Firedelay * Server()->TickSpeed() / 1000;
+	}
 }
 
 void CCharacter::HandleWeapons()
