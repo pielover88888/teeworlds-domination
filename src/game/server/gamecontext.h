@@ -150,6 +150,8 @@ public:
 	//
 	void SwapTeams();
 
+	void ResetWorld();
+
 	// engine events
 	virtual void OnInit();
 	virtual void OnConsoleInit();

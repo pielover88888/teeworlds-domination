@@ -133,6 +133,10 @@ void CGameContext::CreateExplosion(vec2 Pos, int Owner, int Weapon, bool NoDamag
 		CCharacter *apEnts[MAX_CLIENTS];
 		float Radius = 135.0f;
 		float InnerRadius = 48.0f;
+
+		if(str_comp(g_Config.m_SvWeapon, "grenade") == 0)
+			Radius = 48.0f;
+
 		int Num = m_World.FindEntities(Pos, Radius, (CEntity**)apEnts, MAX_CLIENTS, CGameWorld::ENTTYPE_CHARACTER);
 		for(int i = 0; i < Num; i++)
 		{
@@ -1548,6 +1552,26 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 		}
 	}
 #endif
+}
+
+void CGameContext::ResetWorld()
+{
+	CMapItemLayerTilemap *pTileMap = m_Layers.GameLayer();
+	CTile *pTiles = (CTile *)Kernel()->RequestInterface<IMap>()->GetData(pTileMap->m_Data);
+
+	for(int y = 0; y < pTileMap->m_Height; y++)
+	{
+		for(int x = 0; x < pTileMap->m_Width; x++)
+		{
+			int Index = pTiles[y*pTileMap->m_Width+x].m_Index;
+
+			if(Index >= ENTITY_OFFSET)
+			{
+				vec2 Pos(x*32.0f+16.0f, y*32.0f+16.0f);
+				m_pController->OnEntity(Index-ENTITY_OFFSET, Pos);
+			}
+		}
+	}	
 }
 
 void CGameContext::OnShutdown()

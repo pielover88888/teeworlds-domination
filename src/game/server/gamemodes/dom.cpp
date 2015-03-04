@@ -31,6 +31,8 @@ CGameControllerDOM::CGameControllerDOM(class CGameContext *pGameServer)
 	teamWinning = -1;
 	Weapon = WEAPON_GUN;
 
+	str_copy(g_Config.m_SvWeapon, "all", 32);
+
 	m_pGameType = "DOM";
 	m_GameFlags = GAMEFLAG_TEAMS|GAMEFLAG_FLAGS;
 }
@@ -39,7 +41,7 @@ bool CGameControllerDOM::OnEntity(int Index, vec2 Pos)
 {
 	// dont spawn shields/weapons if we are not playing normal domination
 	if(str_comp(g_Config.m_SvGametype, "dom") != 0) {
-		if(Index != ENTITY_SPAWN && Index != ENTITY_SPAWN_RED && Index != ENTITY_SPAWN_BLUE && 
+		if(Index != ENTITY_SPAWN && Index != ENTITY_SPAWN_RED && Index != ENTITY_SPAWN_BLUE &&
 			Index != ENTITY_FLAGSTAND_RED && Index != ENTITY_FLAGSTAND_BLUE) {
 			return false;
 		}
@@ -120,16 +122,6 @@ void CGameControllerDOM::Tick()
 		} else {
 			teamWinning = -1;
 		}
-
-		// regenerate ammo
-		if(str_comp(g_Config.m_SvGametype, "dom") != 0) {
-			for(int i = 0; i < MAX_CLIENTS; i++) {
-				if(GameServer()->m_apPlayers[i] && GameServer()->m_apPlayers[i]->GetCharacter()) {
-					CCharacter* Character = GameServer()->m_apPlayers[i]->GetCharacter();
-					Character->GiveWeapon(Weapon, 1);
-				}
-			}
-		}
 	}
 
 	if(teamWinning == TEAM_BLUE || teamWinning == TEAM_RED) {
@@ -142,7 +134,7 @@ void CGameControllerDOM::Tick()
 				str_format(aBuf, sizeof(aBuf), "Blue team is holding the most points");
 			else
 				str_format(aBuf, sizeof(aBuf), "Red team is holding the most points");
-			
+
 			GameServer()->SendBroadcast(aBuf, -1);
 			*/
 		}
@@ -175,26 +167,23 @@ void CGameControllerDOM::Snap(int SnappingClient)
 void CGameControllerDOM::OnCharacterSpawn(class CCharacter *pChr)
 {
 	// starting weapons
-	if(str_comp(g_Config.m_SvGametype, "domgrenade") == 0) {
-		pChr->IncreaseHealth(1);
-		pChr->GiveWeapon(WEAPON_GRENADE, 1);
+	if(str_comp(g_Config.m_SvWeapon, "grenade") == 0) {
+		pChr->GiveWeapon(WEAPON_GRENADE, -1);
 		pChr->SetWeapon(WEAPON_GRENADE);
 		Weapon = WEAPON_GRENADE;
-	} else if(str_comp(g_Config.m_SvGametype, "domrifle") == 0) {
-		pChr->IncreaseHealth(1);
-		pChr->GiveWeapon(WEAPON_RIFLE, 1);
+	} else if(str_comp(g_Config.m_SvWeapon, "rifle") == 0) {
+		pChr->GiveWeapon(WEAPON_RIFLE, -1);
 		pChr->SetWeapon(WEAPON_RIFLE);
 		Weapon = WEAPON_RIFLE;
-	} else if(str_comp(g_Config.m_SvGametype, "domgun") == 0) {
-		pChr->IncreaseHealth(1);
-		pChr->GiveWeapon(WEAPON_GUN, 1);
+	} else if(str_comp(g_Config.m_SvWeapon, "gun") == 0) {
+		pChr->GiveWeapon(WEAPON_GUN, -1);
 		pChr->SetWeapon(WEAPON_GUN);
 		Weapon = WEAPON_GUN;
 	} else {
-		pChr->IncreaseHealth(10);
 		pChr->GiveWeapon(WEAPON_HAMMER, -1);
 		pChr->GiveWeapon(WEAPON_GUN, 10);
 		Weapon = WEAPON_GUN;
 	}
-	
+
+	pChr->IncreaseHealth(10);
 }

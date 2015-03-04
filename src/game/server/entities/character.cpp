@@ -431,8 +431,9 @@ void CCharacter::FireWeapon()
 	if(!m_ReloadTimer) {
 		m_ReloadTimer = g_pData->m_Weapons.m_aId[m_ActiveWeapon].m_Firedelay * Server()->TickSpeed() / 1000;
 		
-		if(str_comp(g_Config.m_SvGametype, "domgun") == 0)
+		if(str_comp(g_Config.m_SvWeapon, "gun") == 0) {
 			m_ReloadTimer = g_pData->m_Weapons.m_aId[WEAPON_RIFLE].m_Firedelay * Server()->TickSpeed() / 1000;
+		}
 	}
 }
 
@@ -453,7 +454,7 @@ void CCharacter::HandleWeapons()
 
 	// ammo regen
 	int AmmoRegenTime = g_pData->m_Weapons.m_aId[m_ActiveWeapon].m_Ammoregentime;
-	if(AmmoRegenTime)
+	if(AmmoRegenTime && str_comp(g_Config.m_SvWeapon, "gun") != 0)
 	{
 		// If equipped and not active, regen ammo?
 		if (m_ReloadTimer <= 0)
@@ -735,7 +736,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 	if(GameServer()->m_pController->IsFriendlyFire(m_pPlayer->GetCID(), From) && !g_Config.m_SvTeamdamage)
 		return false;
 
-	if(str_comp(g_Config.m_SvGametype, "domgrenade") == 0 && From == m_pPlayer->GetCID()) {
+	if(str_comp(g_Config.m_SvWeapon, "grenade") == 0 && From == m_pPlayer->GetCID()) {
 		return false;
 	}
 
@@ -795,6 +796,10 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 		}
 		GameServer()->CreateSound(GameServer()->m_apPlayers[From]->m_ViewPos, SOUND_HIT, Mask);
 	}
+
+	if(str_comp(g_Config.m_SvWeapon, "gun") == 0 || str_comp(g_Config.m_SvWeapon, "grenade") == 0 || 
+		str_comp(g_Config.m_SvWeapon, "rifle") == 0)
+			m_Health = -1;
 
 	// check for death
 	if(m_Health <= 0)
