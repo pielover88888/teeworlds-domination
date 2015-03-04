@@ -2,6 +2,7 @@
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <game/generated/protocol.h>
 #include <game/server/gamecontext.h>
+#include <engine/shared/config.h>
 #include "pickup.h"
 
 CPickup::CPickup(CGameWorld *pGameWorld, int Type, int SubType)
@@ -26,6 +27,9 @@ void CPickup::Reset()
 
 void CPickup::Tick()
 {
+	if(str_comp(g_Config.m_SvWeapon, "all") != 0)
+		m_SpawnTick = Server()->Tick();
+
 	// wait for respawn
 	if(m_SpawnTick > 0)
 	{

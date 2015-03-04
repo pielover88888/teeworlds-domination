@@ -732,3 +732,9 @@ int IGameController::ClampTeam(int Team)
 		return Team&1;
 	return 0;
 }
+
+
+int IGameController::GetGameoverTick()
+{
+	return m_GameOverTick;
+}

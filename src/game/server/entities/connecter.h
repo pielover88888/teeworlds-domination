@@ -13,6 +13,7 @@ public:
 	virtual void Reset();
 	virtual void Snap(int SnappingClient);
 	virtual void Tick();
+	virtual void TickPaused();
 
 private:
 	vec2 m_From;

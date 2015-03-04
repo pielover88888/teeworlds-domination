@@ -1554,26 +1554,6 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 #endif
 }
 
-void CGameContext::ResetWorld()
-{
-	CMapItemLayerTilemap *pTileMap = m_Layers.GameLayer();
-	CTile *pTiles = (CTile *)Kernel()->RequestInterface<IMap>()->GetData(pTileMap->m_Data);
-
-	for(int y = 0; y < pTileMap->m_Height; y++)
-	{
-		for(int x = 0; x < pTileMap->m_Width; x++)
-		{
-			int Index = pTiles[y*pTileMap->m_Width+x].m_Index;
-
-			if(Index >= ENTITY_OFFSET)
-			{
-				vec2 Pos(x*32.0f+16.0f, y*32.0f+16.0f);
-				m_pController->OnEntity(Index-ENTITY_OFFSET, Pos);
-			}
-		}
-	}	
-}
-
 void CGameContext::OnShutdown()
 {
 	delete m_pController;

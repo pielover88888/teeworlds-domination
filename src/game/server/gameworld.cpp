@@ -123,9 +123,6 @@ void CGameWorld::Reset()
 			m_pNextTraverseEntity = pEnt->m_pNextTypeEntity;
 			pEnt->Reset();
 
-			if(str_comp(g_Config.m_SvWeapon, "all") != 0)
-				RemoveEntity(pEnt);
-
 			pEnt = m_pNextTraverseEntity;
 		}
 	RemoveEntities();
@@ -134,9 +131,6 @@ void CGameWorld::Reset()
 	RemoveEntities();
 
 	m_ResetRequested = false;
-
-	if(str_comp(g_Config.m_SvWeapon, "all") == 0)
-		GameServer()->ResetWorld();
 }
 
 void CGameWorld::RemoveEntities()

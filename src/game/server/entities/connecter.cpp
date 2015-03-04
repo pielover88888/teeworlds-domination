@@ -20,7 +20,6 @@ void CConnecter::Tick()
 	m_EvalTick = Server()->Tick();
 
 	if(m_Energy < 0) {
-		GameServer()->m_World.DestroyEntity(this);
 		Reset();
 		return;
 	}
@@ -31,6 +30,11 @@ void CConnecter::Tick()
 void CConnecter::Reset()
 {
 	GameServer()->m_World.DestroyEntity(this);
+}
+
+void CConnecter::TickPaused()
+{
+	++m_EvalTick;
 }
 
 void CConnecter::Snap(int SnappingClient)

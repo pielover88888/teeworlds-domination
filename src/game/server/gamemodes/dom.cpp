@@ -111,7 +111,7 @@ void CGameControllerDOM::Tick()
 	}
 
 	// give points to team with most flags
-	if(Server()->Tick() - scoreCounter > 5.0f) {
+	if(Server()->Tick() - scoreCounter > 5.0f && IGameController::GetGameoverTick() == -1 ) {
 		scoreCounter = Server()->Tick();
 		if(teamPoints.x > teamPoints.y) {
 			m_aTeamscore[TEAM_RED^1] += 1;
